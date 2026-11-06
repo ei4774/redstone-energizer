@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+
+[[mods]]
+modId="redstone_energizer"
+version="${version}"
+displayName="Redstone Charging"
+authors="Deepseek"
+description='''
+Redstone Charging
+
+Redstone signals charge machines, the items inside containers and player inventories. The rate is a flat base value by default; turn on the signal multiplier to scale it with the redstone level.
+'''
+
+[[mixins]]
+config="redstone_energizer.mixins.json"
+
+[[dependencies.redstone_energizer]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.0,21.2)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.redstone_energizer]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="BOTH"

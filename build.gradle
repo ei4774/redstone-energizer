@@ -1,0 +1,67 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'net.neoforged.gradle.userdev' version '7.0.192'
+}
+
+group = 'dev.redstoneenergizer'
+// Version carries the loader and the game version, e.g. 1.0.1-neoforge-1.21.1
+version = "${mod_version}-${mod_loader}-${minecraft_version}"
+
+base {
+    // "Redstone Charging" - the mod id stays redstone_energizer so existing worlds and ids keep working.
+    archivesName = 'redstone_energizer'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    // Mirror first: the official NeoForged host is unreachable on this network.
+    maven { name = 'NeoForgedMirror'; url = 'https://bmclapi2.bangbang93.com/maven/' }
+    maven { name = 'NeoForged'; url = 'https://maven.neoforged.net/releases' }
+    maven { name = 'AliyunCentral'; url = 'https://maven.aliyun.com/repository/public' }
+    maven { name = 'Modrinth'; url = 'https://api.modrinth.com/maven' }
+    mavenCentral()
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neo_version}"
+
+    // Only for the local compatibility smoke test; not required at runtime.
+    runtimeOnly "maven.modrinth:mekanism:10.7.19.85"
+}
+
+// Dev-only entry point used to smoke-test that the mod actually loads.
+runs {
+    server {
+        programArguments.addAll '--nogui'
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+// Fill the version into the mod metadata at build time.
+tasks.named('processResources', ProcessResources).configure {
+    def props = [version: project.version.toString()]
+    inputs.properties(props)
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand(props)
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+                'Specification-Title'     : 'redstone_energizer',
+                'Specification-Vendor'    : 'redstoneenergizer',
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.version,
+                'Implementation-Vendor'   : 'redstoneenergizer'
+        ])
+    }
+}

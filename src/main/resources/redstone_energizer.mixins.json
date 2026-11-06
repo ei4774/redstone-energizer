@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "dev.redstoneenergizer.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "dev.redstoneenergizer.mixin.LivingItemMixinPlugin",
+  "mixins": [
+    "RedstonePropagationMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}
